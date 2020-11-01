@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import AccountScreen from "../screens/AccountScreen";
+import MainStack from "./MainStack";
+import AuthStack from "./AuthStack";
+import { Context as AuthContext } from "../context/AuthContext";
 
 const AppNavigator = () => {
-  const Tab = createBottomTabNavigator();
+  const {
+    state: { token },
+    initAuthState,
+  } = useContext(AuthContext);
+  useEffect(() => {
+    initAuthState();
+  }, [token]);
 
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Account" component={AccountScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+  const switcher = () => {
+    if (token === null) {
+      return <AuthStack />;
+    } else {
+      return <MainStack />;
+    }
+  };
+
+  return <NavigationContainer>{switcher()}</NavigationContainer>;
 };
 
 export default AppNavigator;
