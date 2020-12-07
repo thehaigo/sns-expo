@@ -1,11 +1,21 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
+import React, { useContext } from "react";
+import { StyleSheet } from "react-native";
+import { WebView } from "react-native-webview";
+import { Context as AuthContext } from "../context/AuthContext";
 const HomeScreen = () => {
+  const {
+    state: { token },
+  } = useContext(AuthContext);
   return (
-    <View style={styles.container}>
-      <Text>HomeScreen</Text>
-    </View>
+    <WebView
+      source={{
+        uri: "http://localhost:4000/sp/",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }}
+      style={{ marginTop: 20 }}
+    />
   );
 };
 
